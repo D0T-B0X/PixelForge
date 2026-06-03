@@ -1,4 +1,4 @@
-# PixelForge
+# Byte8
 
 ## Track
 
@@ -25,8 +25,8 @@ Your emulator must include:
    - Program loaded into memory starting at the standard Chip-8 program address.
 
 2. **Registers**
-   - 16 general-purpose registers: `V0` to `VF`.
-   - Index register `I`.
+   - 16 general-purpose registers: V0 to VF.
+   - Index register I.
    - Program counter.
    - Stack and stack pointer.
 
@@ -36,7 +36,7 @@ Your emulator must include:
    - Execute instruction.
 
 4. **Display**
-   - 64 × 32 monochrome display.
+   - 64 x 32 monochrome display.
    - Ability to clear the screen.
    - Ability to draw sprites.
 
@@ -87,12 +87,65 @@ A browser-based emulator is recommended for easy demoing.
 
 ## Suggested Keyboard Mapping
 
-You may map the original Chip-8 keypad like this:
+Original Chip-8 keypad:
 
-Original keypad:
+| 1 | 2 | 3 | C |
+|---|---|---|---|
+| 4 | 5 | 6 | D |
+| 7 | 8 | 9 | E |
+| A | 0 | B | F |
 
-```text
-1 2 3 C
-4 5 6 D
-7 8 9 E
-A 0 B F
+Suggested modern keyboard mapping:
+
+| 1 | 2 | 3 | 4 |
+|---|---|---|---|
+| Q | W | E | R |
+| A | S | D | F |
+| Z | X | C | V |
+
+## Stretch Goals
+
+- Visual debugger
+- Register viewer
+- Memory viewer
+- Current opcode display
+- Pause/resume
+- Step one instruction at a time
+- Speed control
+- Sound support
+- Drag-and-drop ROM loading
+- Multiple demo ROMs
+
+## AI Tool Usage
+
+You may use AI tools for:
+
+- Understanding Chip-8 instructions
+- Debugging opcode behavior
+- Generating UI code
+- Creating test programs
+- Writing documentation
+
+You must mention in your final README how AI tools were used.
+
+## Demo Expectations
+
+Your final demo should show:
+
+1. Loading a Chip-8 ROM or test program.
+2. Running the program.
+3. Display output working.
+4. Keyboard input working.
+5. A short explanation of the emulator loop.
+6. Optional: debugger or register view.
+
+## Judging Focus
+
+You will be judged on:
+
+- Emulator correctness
+- Technical implementation
+- Ability to run a real Chip-8 program
+- Clarity of demo
+- Documentation
+- Scope management
