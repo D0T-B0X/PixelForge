@@ -1,61 +1,98 @@
-Problem Statement: Mini Fantasy Console
+# PixelForge
 
-Build a small retro-style “fantasy console” that can run simple mini-games written in a tiny instruction format or JSON script.
+## Track
 
-Instead of building a full Chip-8 emulator, which may be too difficult for a 2-person team in 36 hours, this project asks the team to create a simpler virtual game system.
+Retro & Emulator
 
-The console should have a tiny screen, limited colors, keyboard input, and the ability to load and run at least one simple game.
+## Problem Statement
 
-Core Requirements
+Build a working **Chip-8 emulator** that can load and run simple Chip-8 programs or games.
 
-The fantasy console must include:
+Chip-8 is a small virtual machine used for classic-style games and is one of the most beginner-friendly emulator projects. Your goal is to build the core parts of the emulator and run at least one legal Chip-8 ROM, demo, or self-written test program.
 
-A fixed-size display, for example:
-16×16 grid
-32×32 grid
-64×32 pixel canvas
-A simple game runtime with:
-Player position
-Input handling
-Collision detection
-Game loop
-A simple “cartridge” format using JSON or a small script.
+The focus is on building a real emulator for a real retro virtual system, while keeping the scope achievable in 36 hours.
 
-Example cartridge:
+## Theme
 
-{
-  "title": "Coin Collector",
-  "playerStart": { "x": 1, "y": 1 },
-  "walls": [[0,0], [1,0], [2,0]],
-  "coins": [[5,5], [8,3]],
-  "enemies": [[10,6]],
-  "goal": [14,14]
-}
-At least one playable mini-game cartridge.
-Retro-style constraints:
-Limited colors
-Pixel/grid graphics
-Simple sound or text feedback
-Keyboard-only input
-Minimum Viable Product
+Build the machine. Run the game.
 
-A successful MVP can be:
+## Core Requirements
 
-A browser or Python app.
-One built-in game: collect all coins and reach the goal.
-A JSON loader for different maps.
-A simple retro display.
-Suggested Tech Stack
-HTML Canvas
-Pygame
-Phaser
-JavaScript
-Python
-Stretch Goals
-Multiple cartridges
-Built-in cartridge editor
-Sound effects
-Sprite support
-Save/load cartridges
-Debug view showing game state
-Tiny scripting commands such as MOVE, SPAWN, WIN
+Your emulator must include:
+
+1. **Memory**
+   - 4 KB memory.
+   - Program loaded into memory starting at the standard Chip-8 program address.
+
+2. **Registers**
+   - 16 general-purpose registers: `V0` to `VF`.
+   - Index register `I`.
+   - Program counter.
+   - Stack and stack pointer.
+
+3. **Instruction Cycle**
+   - Fetch instruction.
+   - Decode instruction.
+   - Execute instruction.
+
+4. **Display**
+   - 64 × 32 monochrome display.
+   - Ability to clear the screen.
+   - Ability to draw sprites.
+
+5. **Input**
+   - Map the Chip-8 keypad to a modern keyboard layout.
+
+6. **Timers**
+   - Delay timer.
+   - Sound timer, even if sound is represented using a simple beep or visual indicator.
+
+7. **ROM Loading**
+   - Load at least one legal Chip-8 ROM, public-domain demo, homebrew game, or self-written test program.
+
+## Minimum Viable Product
+
+A successful MVP should have:
+
+- A Chip-8 emulator window or browser page.
+- A ROM loader.
+- Working display.
+- Working keyboard input.
+- Enough implemented instructions to run at least one simple ROM or test program.
+- A README explaining how to run the emulator.
+
+## Important Legal Rule
+
+Do not include copyrighted game ROMs.
+
+You may use:
+
+- Public-domain Chip-8 ROMs.
+- Homebrew Chip-8 ROMs.
+- Self-written test ROMs.
+- Simple demo programs created by your team.
+
+## Suggested Tech Stack
+
+You may use any stack, including:
+
+- JavaScript + HTML Canvas
+- Python + Pygame
+- C++
+- Rust
+- Java
+- Go
+
+A browser-based emulator is recommended for easy demoing.
+
+## Suggested Keyboard Mapping
+
+You may map the original Chip-8 keypad like this:
+
+Original keypad:
+
+```text
+1 2 3 C
+4 5 6 D
+7 8 9 E
+A 0 B F
