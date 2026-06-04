@@ -3,7 +3,7 @@
 #include "Display/video.hh"
 
 int main() {
-    std:: cout << "Hello, Chip-8!" << std::endl;
+    TPRINTF("Hello, Chip-8!")
 
     chip8::display::Video display;
     

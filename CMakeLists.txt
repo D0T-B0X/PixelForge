@@ -16,8 +16,13 @@ add_executable(
     ${PROJECT_NAME}
 
     ${PROJECT_SRC_DIR}/main.cpp
-    ${PROJECT_SRC_DIR}/Util/Window/manager.cc
+    ${PROJECT_SRC_DIR}/Memory/ram.cc
+    ${PROJECT_SRC_DIR}/Processor/cpu.cc
+    ${PROJECT_SRC_DIR}/Processor/isa.cc
+    ${PROJECT_SRC_DIR}/Processor/stack.cc
     ${PROJECT_SRC_DIR}/Display/video.cc
+    ${PROJECT_SRC_DIR}/Util/rom_loader.cc
+    ${PROJECT_SRC_DIR}/Util/Window/manager.cc
     ${PROJECT_SRC_DIR}/Util/Window/glad.c
 )
 

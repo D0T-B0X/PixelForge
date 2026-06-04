@@ -6,19 +6,15 @@
 #include <iostream>
 
 #define TPRINTF(statement) std::cout << statement << std::endl;
+#define EPRINTF(error) std::cerr << error;
 
-namespace chip8
-{
-
-typedef uint64_t Cycles;
-typedef uint16_t Addr;
-typedef uint16_t OpCode;
-typedef uint8_t Color;
-typedef uint8_t Pixel;
-typedef int8_t Byte;
-typedef int8_t Register;
-typedef std::vector<Register> RegisterTable;
-
-} // namespace chip8
+#define Cycles uint64_t
+#define Addr uint16_t
+#define OpCode uint16_t
+#define Color uint8_t
+#define Pixel uint8_t
+#define Byte int8_t
+#define Register int8_t
+#define RegisterTable std::vector<Register>
 
 #endif // _TYPES_HH_

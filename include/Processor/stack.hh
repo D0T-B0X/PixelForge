@@ -15,10 +15,10 @@ class Stack
 {
   private:
     // 16 level stack for the system
-    chip8::Addr stack[16];
+    Addr stack[16];
 
     // stack pointer
-    chip8::Byte sp;
+    Byte sp;
 
   public:
 
@@ -30,7 +30,7 @@ class Stack
     /**
      * 
      */
-    chip8::Addr pop();
+    Addr pop();
 };
 
 } // namespace processor

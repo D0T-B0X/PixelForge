@@ -35,6 +35,13 @@ class RAM
      * @param data The actual byte of data
      */
     void store(Addr address, Byte byte);
+
+    /**
+     * @brief Load ROM data into the RAM
+     * 
+     * @param binary A vector holding the binary ROM data 
+     */
+    void loadRom(std::vector<Byte>& binary);
     
 };
 

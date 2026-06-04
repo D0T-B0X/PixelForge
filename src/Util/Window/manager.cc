@@ -33,7 +33,7 @@ Manager::initWindow()
 
     // Managerilize glfw with OpenGL 4.6 Core Profile
     if ( !glfwInit() ) {
-        std::cout << "FATAL: GLFW failed to initialize!" << std::endl;
+        EPRINTF("FATAL: GLFW failed to initialize.\n")
         std::exit(-1);
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -53,8 +53,8 @@ Manager::initWindow()
     // Create a new glfw window
     window = glfwCreateWindow(windowWidth, windowHeight, WINDOW_NAME, NULL, NULL);
     if ( !window ) {
-        std::cout << "FATAL: Window creation failed!" << std::endl;
         glfwTerminate();
+        EPRINTF("FATAL: Window creation failed.\n")
         std::exit(-1);
     }
 
@@ -64,7 +64,7 @@ Manager::initWindow()
 
     // Load GLAD (Essential to use OpenGL helper functions)
     if ( !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) ) {
-        std::cout << "FATAL: GLAD initialization failed!" << std::endl;
+        EPRINTF("FATAL: GLAD initialization failed.\n")
         std::exit(-1);
     }
 
