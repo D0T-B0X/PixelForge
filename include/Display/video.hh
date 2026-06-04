@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "types.hh"
+#include "Util/Window/manager.hh"
 
 namespace chip8
 {
@@ -11,6 +12,7 @@ namespace chip8
 namespace display
 {
 
+// Use this struct to define secondary color of the display
 struct DisplayColor {
     Color red;
     Color green;
@@ -32,13 +34,18 @@ class Video
 {
   private:
     // Chip-8 has a 64x32 monochrome display
-    Pixel display[64 * 32];
+    Pixel                   display[64 * 32];
+    DisplayColor            secondaryColor;
+    
+    util::window::Manager   windowManager;
 
   public:
     Video();
 
     // Pass in the second color (first is always white)
     Video(const DisplayColor& secondaryColor);
+
+    void run();
 };
 
 } // namespace display

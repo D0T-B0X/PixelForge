@@ -14,14 +14,27 @@ namespace memory
 class RAM
 {
   private: 
+    // 4 KB of RAM
     Byte ram[4096];
 
   public:
     RAM();
 
+    /**
+     * @brief Load a byte from RAM
+     * 
+     * @param address 
+     * @return Byte 
+     */
     Byte load(Addr address);
 
-    void store(Addr address, Byte data);
+    /**
+     * @brief Store a byte in RAM
+     * 
+     * @param address Where the byte needs to be stored in RAM
+     * @param data The actual byte of data
+     */
+    void store(Addr address, Byte byte);
     
 };
 
