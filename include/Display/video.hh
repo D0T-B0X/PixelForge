@@ -3,8 +3,9 @@
 
 #include <cstdint>
 
-#include "types.hh"
 #include "Util/Window/manager.hh"
+#include "Display/fontset.hh"
+#include "types.hh"
 
 namespace chip8
 {
@@ -45,7 +46,17 @@ class Video
     // Pass in the second color (first is always white)
     Video(const DisplayColor& secondaryColor);
 
+    /**
+     * Set the pixel to ON
+     */
+    bool setPixel(Byte x_coord, Byte y_coord);
+
     void run();
+
+    /**
+     * Clear the display by setting all pixels to OFF (0)
+     */
+    void clear();
 };
 
 } // namespace display

@@ -23,6 +23,22 @@ Video::Video(const DisplayColor& secondaryColor)
     windowManager.initWindow();
 }
 
+bool
+Video::setPixel(Byte x_coord, Byte y_coord)
+{
+    // 1-D index of the pixel
+    uint16_t display_cell = x_coord + (y_coord * 64);
+
+    // original state of the pixel
+    Pixel pixel_state = this->display[display_cell];
+
+    // Switch the pixel's state
+    this->display[display_cell] ^= 1;
+
+    // if the pixel was originally ON, collision = true, else false
+    return pixel_state; 
+}
+
 // ** TEST RUN ONLY: Main run loop will exist inside an application layer **
 // Run the main loop 
 void
@@ -32,6 +48,13 @@ Video::run()
         windowManager.swapWindowBuffers();
         glfwPollEvents();
     }
+}
+
+// Set all pixels to OFF
+void
+Video::clear()
+{
+    for(Pixel& pixel : display) { pixel = 0; }
 }
 
 } // namespace display
