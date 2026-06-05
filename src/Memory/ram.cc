@@ -8,16 +8,20 @@ namespace memory
 
 RAM::RAM()
 {
-    // reset RAM to 0
-    for(int i = 0; i < 4096; ++i) ram[i] = 0;
+    // load the fontset into RAM
+    std::copy(
+        std::begin(display::fontset),
+        std::end(display::fontset),
+        &ram[FONTSET_START_ADDRESS]
+    );
 }
 
 Byte
 RAM::load(Addr address)
-{
-    // access over 4095 and below 512 results in termination 
-    if (address > 0xFFF || address < 0x200) {
-        std::cout << "FATAL: RAM::Invalid Address Access" << std::endl;
+{  
+    // Access over 4095 results in termination
+    if (address > 0xFFF) {
+        EPRINTF("FATAL: RAM::Invalid Address Access.\n")
         exit(-1);
     }
 
@@ -30,7 +34,7 @@ RAM::store(Addr address, Byte data)
 {
     // access over 4095 and below 512 results in termination 
     if (address > 0xFFF || address < 0x200) {
-        std::cout << "FATAL: RAM::Invalid Address Access" << std::endl;
+        EPRINTF("FATAL: RAM::Invalid Address Access.\n")
         exit(-1);
     }
 
@@ -41,7 +45,11 @@ void
 RAM::loadRom(std::vector<Byte>& binary)
 {
     // Always load ROM into RAM from 0x200 (512 B)
-    std::copy(binary.begin(), binary.end(), &ram[0x200]);
+    std::copy(
+        binary.begin(), 
+        binary.end(), 
+        &ram[0x200]
+    );
 }
 
 } // namespace memory

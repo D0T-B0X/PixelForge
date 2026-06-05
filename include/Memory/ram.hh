@@ -3,6 +3,7 @@
 
 #include <cstdint>
 
+#include "Display/fontset.hh"
 #include "types.hh"
 
 namespace chip8
@@ -15,7 +16,7 @@ class RAM
 {
   private: 
     // 4 KB of RAM
-    Byte ram[4096];
+    Byte ram[4096] = {0};
 
   public:
     RAM();
