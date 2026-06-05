@@ -18,19 +18,20 @@ class Stack
     Addr stack[16];
 
     // stack pointer
-    Byte sp;
+    Register sp;
 
   public:
+    Stack();
 
     /**
      * 
      */
-    void push();
+    void push(ProgramCounter pc);
 
     /**
      * 
      */
-    Addr pop();
+    ProgramCounter pop();
 };
 
 } // namespace processor

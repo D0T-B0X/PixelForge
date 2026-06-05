@@ -10,7 +10,9 @@
 
 #define Cycles uint64_t
 #define Addr uint16_t
-#define OpCode uint16_t
+#define ProgramCounter uint16_t
+#define Instruction uint16_t
+#define OpCode uint8_t
 #define Color uint8_t
 #define Pixel uint8_t
 #define Byte int8_t
