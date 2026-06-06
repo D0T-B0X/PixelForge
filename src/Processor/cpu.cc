@@ -8,9 +8,15 @@ namespace processor
 
 // PC always starts from 0x200
 // The memory index pointer is 
-CPU::CPU(memory::RAM& mem, display::Video& display, processor::Stack& stack)
+CPU::CPU(
+    memory::RAM& mem, 
+    display::Video& display,
+    timer::Delay& delay,
+    timer::Sound& sound
+)
  : pc(0x200), cycle_count(0), ram(mem), 
-   display(display), stack(stack)
+   display(display), delay(delay),
+   sound(sound)
 {
     // 16 general purpose registers (V0 - VF)
     register_table = RegisterTable(16); 
@@ -30,7 +36,7 @@ CPU::fetch()
 }
 
 Operands
-CPU::decode(Instruction& instruction)
+CPU::decode(const Instruction& instruction)
 {   
     Operands ops;
 
@@ -45,7 +51,7 @@ CPU::decode(Instruction& instruction)
 }
 
 void
-CPU::execute(Operands& ops)
+CPU::execute(const Operands& ops)
 {
     OpCode op_code = ops.op_code;
 
@@ -74,7 +80,7 @@ CPU::execute(Operands& ops)
 }
 
 void
-CPU::execute_ControlOperations(Operands& ops)
+CPU::execute_ControlOperations(const Operands& ops)
 {
     switch (ops.op_code) 
     {
@@ -102,7 +108,7 @@ CPU::execute_ControlOperations(Operands& ops)
 }
 
 void
-CPU::execute_BranchOperations(Operands& ops)
+CPU:: execute_BranchOperations(const Operands& ops)
 {
     switch (ops.op_code)
     {
@@ -114,6 +120,9 @@ CPU::execute_BranchOperations(Operands& ops)
             break;
         case 0x5:
             I_5XY0(ops);
+            break;
+        case 0x9:
+            I_9XY0(ops);
             break;
         case 0xE:
             switch (ops.sub_op_code)
@@ -130,7 +139,7 @@ CPU::execute_BranchOperations(Operands& ops)
 }
 
 void
-CPU::execute_ALUOperations(Operands& ops)
+CPU::execute_ALUOperations(const Operands& ops)
 {
     switch (ops.op_code)
     {
@@ -178,7 +187,7 @@ CPU::execute_ALUOperations(Operands& ops)
 }
 
 void
-CPU::execute_MemoryDisplayOperations(Operands& ops)
+CPU::execute_MemoryDisplayOperations(const Operands& ops)
 {
     switch (ops.op_code)
     {
@@ -198,7 +207,7 @@ CPU::execute_MemoryDisplayOperations(Operands& ops)
 }
 
 void
-CPU::execute_IOOperations(Operands& ops)
+CPU::execute_IOOperations(const Operands& ops)
 {
     // since all IO operations use the 'F' op code, we 
     // need to make a decision based on the last byte
@@ -253,14 +262,14 @@ CPU::I_00EE()
 
 // unconditional jump to NNN
 void
-CPU::I_1NNN(Operands& ops)
+CPU::I_1NNN(const Operands& ops)
 {
     pc = ops.address;
 }
 
 // call subroutine at NNN
 void
-CPU::I_2NNN(Operands& ops)
+CPU::I_2NNN(const Operands& ops)
 {
     stack.push(pc);
     pc = ops.address;
@@ -268,7 +277,7 @@ CPU::I_2NNN(Operands& ops)
 
 // skip the next instruction if VX == NN
 void
-CPU::I_3XNN(Operands& ops)
+CPU::I_3XNN(const Operands& ops)
 {
     if (register_table[ops.x] == ops.data) {
         pc += 2;
@@ -277,7 +286,7 @@ CPU::I_3XNN(Operands& ops)
 
 // skip the next instruction if VX != NN
 void
-CPU::I_4XNN(Operands& ops)
+CPU::I_4XNN(const Operands& ops)
 {
     if (register_table[ops.x] != ops.data) {
         pc += 2;
@@ -286,7 +295,7 @@ CPU::I_4XNN(Operands& ops)
 
 // skip the next instruction if VX == VY
 void
-CPU::I_5XY0(Operands& ops)
+CPU::I_5XY0(const Operands& ops)
 {
     if (register_table[ops.x] == register_table[ops.y]) {
         pc += 2;
@@ -295,7 +304,7 @@ CPU::I_5XY0(Operands& ops)
 
 // skip the next instruction if VX != VY
 void
-CPU::I_9XY0(Operands& ops)
+CPU::I_9XY0(const Operands& ops)
 {
     if (register_table[ops.x] != register_table[ops.y]) {
         pc += 2;
@@ -304,7 +313,7 @@ CPU::I_9XY0(Operands& ops)
 
 // skip the next instruction if a key press is detected
 void
-CPU::I_EX9E(Operands& ops)
+CPU::I_EX9E(const Operands& ops)
 {
     // if (keyboard.isPressed(register_table[ops.x])) {
     //    pc += 2;
@@ -313,7 +322,7 @@ CPU::I_EX9E(Operands& ops)
 
 // skip the next instruction if a key is not pressed
 void
-CPU::I_EXA1(Operands& ops)
+CPU::I_EXA1(const Operands& ops)
 {
     // if (!keyboard.isPressed(register_table[ops.x])) {
     //    pc += 2;
@@ -322,49 +331,49 @@ CPU::I_EXA1(Operands& ops)
 
 // immediate value assignment to a register
 void
-CPU::I_6XNN(Operands& ops)
+CPU::I_6XNN(const Operands& ops)
 {
     register_table[ops.x] = ops.data;
 }
 
 // immediate value addition to a register
 void
-CPU::I_7XNN(Operands& ops)
+CPU::I_7XNN(const Operands& ops)
 {
     register_table[ops.x] += ops.data;
 }
 
 // register value assignment to a register
 void
-CPU::I_8XY0(Operands& ops)
+CPU::I_8XY0(const Operands& ops)
 {
     register_table[ops.x] = register_table[ops.y];
 }
 
 // bitwise OR between two registers
 void
-CPU::I_8XY1(Operands& ops)
+CPU::I_8XY1(const Operands& ops)
 {
     register_table[ops.x] |= register_table[ops.y];
 }
 
 // bitwise AND between two registers
 void
-CPU::I_8XY2(Operands& ops)
+CPU::I_8XY2(const Operands& ops)
 {
     register_table[ops.x] &= register_table[ops.y];
 }
 
 // bitwise xor between two registers
 void
-CPU::I_8XY3(Operands& ops)
+CPU::I_8XY3(const Operands& ops)
 {
     register_table[ops.x] ^= register_table[ops.y];
 }
 
 // register addition and carry flag set
 void
-CPU::I_8XY4(Operands& ops)
+CPU::I_8XY4(const Operands& ops)
 {
     uint16_t sum = register_table[ops.x] + register_table[ops.y];
     register_table[ops.x] = sum & 0xFF;
@@ -373,7 +382,7 @@ CPU::I_8XY4(Operands& ops)
 
 // register subtraction and borrow flag reset
 void 
-CPU::I_8XY5(Operands& ops)
+CPU::I_8XY5(const Operands& ops)
 {
     Register x = register_table[ops.x];
     Register y = register_table[ops.y];
@@ -383,7 +392,7 @@ CPU::I_8XY5(Operands& ops)
 
 // right shift with lsb in flag 
 void
-CPU::I_8XY6(Operands& ops)
+CPU::I_8XY6(const Operands& ops)
 {
     Register lsb = register_table[ops.y] & 0x01;
     register_table[ops.x] = register_table[ops.y] >> 1;
@@ -392,7 +401,7 @@ CPU::I_8XY6(Operands& ops)
 
 // inverted register subtraction and borrow set
 void
-CPU::I_8XY7(Operands& ops)
+CPU::I_8XY7(const Operands& ops)
 {
     Register x = register_table[ops.x];
     Register y = register_table[ops.y];
@@ -402,7 +411,7 @@ CPU::I_8XY7(Operands& ops)
 
 // left shift with msb in flag 
 void
-CPU::I_8XYE(Operands& ops)
+CPU::I_8XYE(const Operands& ops)
 {
     Register msb = (register_table[ops.y] & 0x80) >> 7;
     register_table[ops.x] = register_table[ops.y] << 1;
@@ -411,21 +420,21 @@ CPU::I_8XYE(Operands& ops)
 
 // set index register I to NNN
 void
-CPU::I_ANNN(Operands& ops)
+CPU::I_ANNN(const Operands& ops)
 {
     i = ops.address;
 }
 
 // jump to address NNN + V0
 void
-CPU::I_BNNN(Operands& ops)
+CPU::I_BNNN(const Operands& ops)
 {
     pc = ops.address + register_table[0x0];
 }
 
 // set VX to random byte bitwise ANDed with NN
 void
-CPU::I_CXNN(Operands& ops)
+CPU::I_CXNN(const Operands& ops)
 {
     Byte random_byte = std::rand() % 256; 
     register_table[ops.x] = random_byte & ops.data;
@@ -433,7 +442,7 @@ CPU::I_CXNN(Operands& ops)
 
 // display sprite at (VX, VY) with width 8 and height N
 void
-CPU::I_DXYN(Operands& ops)
+CPU::I_DXYN(const Operands& ops)
 {
     Byte x_coord = register_table[ops.x] % 64; 
     Byte y_coord = register_table[ops.y] % 32; 
@@ -458,14 +467,14 @@ CPU::I_DXYN(Operands& ops)
 
 // set VX to delay timer value
 void
-CPU::I_FX07(Operands& ops)
+CPU::I_FX07(const Operands& ops)
 {
-    // Omitted: No timer implemented
+    register_table[ops.x] = delay.getTimer();
 }
 
 // await key press and store in VX (blocking instruction)
 void
-CPU::I_FX0A(Operands& ops)
+CPU::I_FX0A(const Operands& ops)
 {
     Byte key = 1; // keyboard.getPressedKey(); 
     if (key == -1) {
@@ -477,28 +486,28 @@ CPU::I_FX0A(Operands& ops)
 
 // set delay timer to VX
 void
-CPU::I_FX15(Operands& ops)
+CPU::I_FX15(const Operands& ops)
 {
-    // Omitted: No timer implemented
+    delay.setTimer(register_table[ops.x]);
 }
 
 // set sound timer to VX
 void
-CPU::I_FX18(Operands& ops)
+CPU::I_FX18(const Operands& ops)
 {
-    // Omitted: No timer implemented
+    sound.setTimer(register_table[ops.x]);    
 }
 
 // add VX to index register I
 void
-CPU::I_FX1E(Operands& ops)
+CPU::I_FX1E(const Operands& ops)
 {
     i += register_table[ops.x];
 }
 
 // set I to the location of the sprite for the character in VX
 void
-CPU::I_FX29(Operands& ops)
+CPU::I_FX29(const Operands& ops)
 {
     Byte character_index = register_table[ops.x] & 0x0F;
     
@@ -508,7 +517,7 @@ CPU::I_FX29(Operands& ops)
 
 // store binary-coded decimal representation of VX at I, I+1, I+2
 void
-CPU::I_FX33(Operands& ops)
+CPU::I_FX33(const Operands& ops)
 {
     Byte x = register_table[ops.x];
     ram.store(i, x / 100);
@@ -518,7 +527,7 @@ CPU::I_FX33(Operands& ops)
 
 // store registers V0 through VX in memory starting at I
 void
-CPU::I_FX55(Operands& ops)
+CPU::I_FX55(const Operands& ops)
 {
     for (Register index = 0; index <= ops.x; ++index) {
         ram.store(i + index, register_table[index]);
@@ -527,7 +536,7 @@ CPU::I_FX55(Operands& ops)
 
 // load registers V0 through VX from memory starting at I
 void
-CPU::I_FX65(Operands& ops)
+CPU::I_FX65(const Operands& ops)
 {
     for (Register index = 0; index <= ops.x; ++index) {
         register_table[index] = ram.load(i + index);

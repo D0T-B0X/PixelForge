@@ -10,8 +10,6 @@ Video::Video()
 {
     // Set all pixels in the display to 0 (OFF)
     for(Pixel& pixel : display) { pixel = 0; }
-
-    windowManager.initWindow();
 }
 
 Video::Video(const DisplayColor& secondaryColor)
@@ -19,8 +17,6 @@ Video::Video(const DisplayColor& secondaryColor)
 {
     // Set all pixels in the display to 0 (OFF)
     for(Pixel& pixel : display) { pixel = 0; }
-
-    windowManager.initWindow();
 }
 
 bool
@@ -37,17 +33,6 @@ Video::setPixel(Byte x_coord, Byte y_coord)
 
     // if the pixel was originally ON, collision = true, else false
     return pixel_state; 
-}
-
-// ** TEST RUN ONLY: Main run loop will exist inside an application layer **
-// Run the main loop 
-void
-Video::run()
-{
-    while( windowManager.shouldWindowClose() == false ) {
-        windowManager.swapWindowBuffers();
-        glfwPollEvents();
-    }
 }
 
 // Set all pixels to OFF

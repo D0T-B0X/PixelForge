@@ -15,8 +15,9 @@
 #define OpCode uint8_t
 #define Color uint8_t
 #define Pixel uint8_t
-#define Byte int8_t
-#define Register int8_t
+#define Timer uint8_t
+#define Byte uint8_t
+#define Register uint8_t
 #define RegisterTable std::vector<Register>
 
 #endif // _TYPES_HH_
