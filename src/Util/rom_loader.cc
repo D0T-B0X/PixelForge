@@ -7,6 +7,10 @@ namespace util
 
 {
 
+RomLoader::RomLoader()
+{
+}
+
 std::vector<Byte>
 RomLoader::parseROM(const char* path)
 {

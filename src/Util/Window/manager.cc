@@ -94,8 +94,20 @@ Manager::swapWindowBuffers()
     glfwSwapBuffers(window);
 }
 
+void
+Manager::processInput()
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+
+bool
+Manager::isKeyPressed(int glfw_key_code) const
+{
+    return (glfwGetKey(window, glfw_key_code) == GLFW_PRESS);
+}
+
 } // namespace window
-
 } // namespace util
-
 } // namespace chip8

@@ -3,11 +3,12 @@
 
 #include <vector>
 
+#include "Display/video.hh"
+#include "IO/keypad.hh" 
 #include "Memory/ram.hh"
 #include "Processor/stack.hh"
 #include "Timer/delay.hh"
 #include "Timer/sound.hh"
-#include "Display/video.hh"
 #include "types.hh"
 
 namespace chip8
@@ -53,6 +54,9 @@ class CPU
 
     // The CPU call stack
     processor::Stack stack;
+
+    // Keypad io object reference
+    io::Keypad& keypad;
 
     /**
      * @brief Fetches the next instruction in the binary
@@ -231,7 +235,8 @@ class CPU
       memory::RAM& mem, 
       display::Video& display,
       timer::Delay& delay,
-      timer::Sound& sound
+      timer::Sound& sound,
+      io::Keypad& keypad
     );
     
     void cycle();
