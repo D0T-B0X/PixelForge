@@ -56,7 +56,6 @@ class Video
 };
 
 } // namespace display
-
 } // namespace chip8
 
 #endif // _DISPLAY_VIDEO_HH_

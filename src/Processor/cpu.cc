@@ -12,11 +12,12 @@ CPU::CPU(
     memory::RAM& mem, 
     display::Video& display,
     timer::Delay& delay,
-    timer::Sound& sound
+    timer::Sound& sound,
+    io::Keypad& keypad
 )
  : pc(0x200), cycle_count(0), ram(mem), 
    display(display), delay(delay),
-   sound(sound)
+   sound(sound), keypad(keypad)
 {
     // 16 general purpose registers (V0 - VF)
     register_table = RegisterTable(16); 
@@ -315,18 +316,18 @@ CPU::I_9XY0(const Operands& ops)
 void
 CPU::I_EX9E(const Operands& ops)
 {
-    // if (keyboard.isPressed(register_table[ops.x])) {
-    //    pc += 2;
-    // }
+    if (keypad.isKeyPressed(register_table[ops.x])) {
+       pc += 2;
+    }
 }
 
 // skip the next instruction if a key is not pressed
 void
 CPU::I_EXA1(const Operands& ops)
 {
-    // if (!keyboard.isPressed(register_table[ops.x])) {
-    //    pc += 2;
-    // }
+    if (!keypad.isKeyPressed(register_table[ops.x])) {
+       pc += 2;
+    }
 }
 
 // immediate value assignment to a register
@@ -476,12 +477,9 @@ CPU::I_FX07(const Operands& ops)
 void
 CPU::I_FX0A(const Operands& ops)
 {
-    Byte key = 1; // keyboard.getPressedKey(); 
-    if (key == -1) {
-        pc -= 2; 
-    } else {
-        register_table[ops.x] = key;
-    }
+    int8_t key = keypad.getPressedKey(); 
+    if (key == -1) { pc -= 2; } 
+    else { register_table[ops.x] = key; }
 }
 
 // set delay timer to VX

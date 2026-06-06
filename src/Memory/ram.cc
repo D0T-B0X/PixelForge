@@ -42,7 +42,7 @@ RAM::store(Addr address, Byte data)
 }
 
 void
-RAM::loadRom(std::vector<Byte>& binary)
+RAM::loadRom(const std::vector<Byte>& binary)
 {
     // Always load ROM into RAM from 0x200 (512 B)
     std::copy(

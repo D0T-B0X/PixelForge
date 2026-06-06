@@ -42,7 +42,7 @@ class RAM
      * 
      * @param binary A vector holding the binary ROM data 
      */
-    void loadRom(std::vector<Byte>& binary);
+    void loadRom(const std::vector<Byte>& binary);
     
 };
 
