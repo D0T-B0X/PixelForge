@@ -17,7 +17,7 @@ RAM::RAM()
 }
 
 Byte
-RAM::load(Addr address)
+RAM::load(Addr address) const
 {  
     // Access over 4095 results in termination
     if (address > 0xFFF) {

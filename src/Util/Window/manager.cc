@@ -78,11 +78,12 @@ Manager::initWindow()
 void
 Manager::cleanup()
 {
+    glfwDestroyWindow(window);
     glfwTerminate();
 }
 
 bool
-Manager::shouldWindowClose()
+Manager::shouldWindowClose() const
 {
     return glfwWindowShouldClose(window);
 }
