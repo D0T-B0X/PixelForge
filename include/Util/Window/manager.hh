@@ -47,7 +47,7 @@ class Manager
      * @brief Window runtime state information
      * 
      */
-    bool shouldWindowClose();
+    bool shouldWindowClose() const;
 
     void swapWindowBuffers();
 };

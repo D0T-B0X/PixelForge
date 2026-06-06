@@ -16,12 +16,7 @@ namespace util
 
 class RomLoader
 {
-  private:
-    memory::RAM& ram;
-
   public:
-    RomLoader(memory::RAM& ram);
-
     /**
      * @brief Load the uploaded rom and parse it
      * 

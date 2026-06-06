@@ -7,11 +7,6 @@ namespace util
 
 {
 
-RomLoader::RomLoader(memory::RAM& ram)
- : ram(ram)
-{
-}
-
 std::vector<Byte>
 RomLoader::parseROM(const char* path)
 {
@@ -47,5 +42,4 @@ RomLoader::parseROM(const char* path)
 }
 
 } // namespace util
-
 } // namespace chip8

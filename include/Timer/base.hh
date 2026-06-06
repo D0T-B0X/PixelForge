@@ -9,6 +9,8 @@
 #ifndef _TIMER_BASE_HH_
 #define _TIMER_BASE_HH_
 
+#include "types.hh"
+
 namespace chip8
 {
 
@@ -19,6 +21,11 @@ class Base
 {
   public:
     /**
+     * Default destructor
+     */
+    virtual ~Base() = default;
+
+    /**
      * decrement the counter value with safeguards
      */
     virtual void decrementTimer() { };
@@ -26,7 +33,12 @@ class Base
     /**
      * set the counter value within the permitted range
      */
-    virtual void setCounterTime() { };
+    virtual void setTimer(Timer value) { };
+
+    /**
+     * return the current value of the timer
+     */
+    virtual Timer getTimer() { return 0; };
 };
 
 } // namespace timer

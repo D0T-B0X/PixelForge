@@ -17,7 +17,7 @@ void
 Stack::push(ProgramCounter pc)
 {
     // terminate the program on a stack overflow
-    if (sp == 15) {
+    if (sp == 16) {
         EPRINTF("FATAL: Stack Overflow.\n")
         std::exit(-1);
     }

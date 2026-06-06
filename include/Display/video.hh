@@ -37,8 +37,6 @@ class Video
     // Chip-8 has a 64x32 monochrome display
     Pixel                   display[64 * 32];
     DisplayColor            secondaryColor;
-    
-    util::window::Manager   windowManager;
 
   public:
     Video();
@@ -50,8 +48,6 @@ class Video
      * Set the pixel to ON
      */
     bool setPixel(Byte x_coord, Byte y_coord);
-
-    void run();
 
     /**
      * Clear the display by setting all pixels to OFF (0)

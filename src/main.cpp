@@ -1,13 +1,14 @@
 #include <iostream>
 
-#include "Display/video.hh"
+#include "system.hh"
 
 int main() {
     TPRINTF("Hello, Chip-8!")
 
-    chip8::display::Video display;
+    // Initialize system subcomponents;
+    chip8::System system;
     
-    display.run();
+    system.run();
 
     return 0;
 }

@@ -25,9 +25,9 @@ class RAM
      * @brief Load a byte from RAM
      * 
      * @param address 
-     * @return Byte 
+      * @return Byte 
      */
-    Byte load(Addr address);
+        Byte load(Addr address) const;
 
     /**
      * @brief Store a byte in RAM
