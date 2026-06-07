@@ -10,6 +10,7 @@
 #include "Timer/delay.hh"
 #include "Timer/sound.hh"
 #include "types.hh"
+#include "config.hh"
 
 namespace chip8
 {
@@ -42,6 +43,8 @@ class CPU
     // General Purpose registers
     RegisterTable register_table;
 
+    Register rpl_flags[8]; // 8 RPL flags
+
     // Reference to RAM object for memory access
     memory::RAM& ram;
 
@@ -58,25 +61,25 @@ class CPU
     // Keypad io object reference
     io::Keypad& keypad;
 
+    // Reference to global config object
+    EmulatorQuirks& quirks;
+
     /**
      * @brief Fetches the next instruction in the binary
-     * 
-     * @return The fetched instruction
+     * * @return The fetched instruction
      */
     Instruction fetch();
 
     /**
      * @brief Decode the instruction into its operands
-     * 
-     * @param instruction The instruction to decode
+     * * @param instruction The instruction to decode
      * @return The operands of the decoded instruction
      */
     Operands decode(const Instruction& instruction);
 
     /**
      * @brief 
-     * 
-     * @param ops 
+     * * @param ops 
      */
     void execute(const Operands& ops);
 
@@ -88,51 +91,63 @@ class CPU
      * 3) ALU : ALU operations (addition, sub, bit shift etc)
      * 4) Memory/Display: RAM and display related operations
      * 5) Timers and IO : Keypad input and Sound/Delay timer instructions
-     *   
-     */
+     * */
 
     /**
     * @brief Control flow operation execution(pc jumps, display clear)
-    * 
-    * @param ops Operands of the decoded instruction
+    * * @param ops Operands of the decoded instruction
     */
     void execute_ControlOperations(const Operands& ops);
 
     /**
      * @brief Condition branch operation exection
-     * 
-     * @param ops Operands of the decoded instruction
+     * * @param ops Operands of the decoded instruction
      */
     void execute_BranchOperations(const Operands& ops);
 
     /**
      * @brief Math and logic operation execution
-     * 
-     * @param ops Operands of the decoded instruction
+     * * @param ops Operands of the decoded instruction
      */
     void execute_ALUOperations(const Operands& ops);
 
     /**
      * @brief Direct Memory access and sprite draw operations
-     * 
-     * @param ops Operands of the decoded instruction
+     * * @param ops Operands of the decoded instruction
      */
     void execute_MemoryDisplayOperations(const Operands& ops);
 
     /**
      * @brief Timer and keypad input operations
-     * 
-     * @param ops Operands of the decoded instruction
+     * * @param ops Operands of the decoded instruction
      */
     void execute_IOOperations(const Operands& ops);
 
     // *** ISA methods ***
+
+    // 0x00CN Scroll display down by N lines
+    void I_00CN(const Operands& ops);
 
     // 0x00E0 maps to display clear
     void I_00E0();
 
     // 0x00EE Pop the call stack and return the pc
     void I_00EE();
+
+    // 0x00FB Scroll display right by 4 pixels
+    void I_00FB();
+
+    // 0x00FC Scroll display left by 4 pixels
+    void I_00FC();
+
+    // 0x00FD Halt emulator execution
+    void I_00FD();
+
+    // 0x00FE Disable high-resolution mode
+    void I_00FE();
+
+    // 0x00FF Enable high-resolution mode
+    void I_00FF();
 
     // Unconditional jump to memory address 0xNNN
     void I_1NNN(const Operands& ops);
@@ -221,6 +236,9 @@ class CPU
     // Set i = hex VX
     void I_FX29(const Operands& ops);
 
+    // Set i = high-res hex VX
+    void I_FX30(const Operands& ops);
+
     // Decode VX into BCD
     void I_FX33(const Operands& ops);
 
@@ -230,20 +248,26 @@ class CPU
     // load (V0 - VF) from memory addresses (i) to (i + x)
     void I_FX65(const Operands& ops);
 
+    // Save V0-VX to RPL user flags
+    void I_FX75(const Operands& ops);
+
+    // Load V0-VX from RPL user flags
+    void I_FX85(const Operands& ops);
+
   public:
     CPU(
       memory::RAM& mem, 
       display::Video& display,
       timer::Delay& delay,
       timer::Sound& sound,
-      io::Keypad& keypad
+      io::Keypad& keypad,
+      EmulatorQuirks& quirks
     );
     
     void cycle();
 };
 
 } // namespace processor
-
 } // processor chip8
 
 #endif // _PROCESSOR_CPU_HH_
