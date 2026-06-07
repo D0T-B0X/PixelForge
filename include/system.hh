@@ -27,6 +27,10 @@ namespace chip8
 class System
 {
   private:
+
+    // Emulator global configuration
+    EmulatorQuirks quirks;
+    
     // system RAM (4KB)
     memory::RAM ram;
 

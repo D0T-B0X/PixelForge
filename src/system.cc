@@ -11,7 +11,8 @@ System::System()
     this->display, 
     this->delay, 
     this->sound,
-    this->keypad
+    this->keypad,
+    this->quirks
    ),
    romLoaded(false)
 {
