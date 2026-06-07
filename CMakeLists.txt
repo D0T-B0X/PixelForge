@@ -9,20 +9,28 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# automatic glfw dependency resolution 
-include(FetchContent)
-FetchContent_Declare(
-    glfw
-    GIT_REPOSITORY https://github.com/glfw/glfw.git
-    GIT_TAG        3.4
-)
+find_package(glfw3 3.4 QUIET)
 
-# speed up compile times by disabling tests 
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+if(glfw3_FOUND)
+    message(STATUS "Found system GLFW. Bypassing network fetch.")
+else()
+    message(STATUS "System GLFW not found. Fetching from source for CI/CD...")
+    
+    include(FetchContent)
+    FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw.git
+        GIT_TAG        3.4
+        GIT_SHALLOW    ON # Enforce shallow clone to reduce payload size
+    )
 
-FetchContent_MakeAvailable(glfw)
+    # Disable sub-builds to speed up CI/CD pipeline times
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+
+    FetchContent_MakeAvailable(glfw)
+endif()
 
 set(PROJECT_SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 set(PROJECT_INC_DIR "${CMAKE_SOURCE_DIR}/include")
