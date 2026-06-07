@@ -68,12 +68,12 @@ Corresponding keyboard keys:
 
 ## Project Structure
 
- > src/Processor: CPU instructions, fetch, decode, execute, call stack.
- > src/IO: keypad state management.
- > src/Memory: System RAM (4KB) load, store.
- > src/Timer: Delay and Sound timer states, set, decrement
- > src/Display: Pixel buffer of the screen, clear, scroll, etc.
- > src/Util: Emulator window manager and ROM loader components
+ > * src/Processor: CPU instructions, fetch, decode, execute, call stack.
+ > * src/IO: keypad state management.
+ > * src/Memory: System RAM (4KB) load, store.
+ > * src/Timer: Delay and Sound timer states, set, decrement
+ > * src/Display: Pixel buffer of the screen, clear, scroll, etc.
+ > * src/Util: Emulator window manager and ROM loader components
 ## Known Bugs
 
  * Emulator window crashes on drag and drop hover in wayland compositors
