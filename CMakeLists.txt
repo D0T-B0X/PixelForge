@@ -1,13 +1,28 @@
 cmake_minimum_required(VERSION 3.11)
-project(PixelForge)
+project(
+    PixelForge
+    VERSION 1.0.0
+    LANGUAGES CXX C
+)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(PkgConfig REQUIRED)
-find_package(glfw3 REQUIRED)
-pkg_check_modules(GLFW REQUIRED glfw3)
+# automatic glfw dependency resolution 
+include(FetchContent)
+FetchContent_Declare(
+    glfw
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG        3.4
+)
+
+# speed up compile times by disabling tests 
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(glfw)
 
 set(PROJECT_SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 set(PROJECT_INC_DIR "${CMAKE_SOURCE_DIR}/include")
@@ -29,14 +44,20 @@ add_executable(
     ${PROJECT_SRC_DIR}/Util/Window/glad.c
 )
 
-set_target_properties(PixelForge PROPERTIES MACOSX_BUNDLE TRUE)
+if(APPLE)
+    set_target_properties(PixelForge PROPERTIES MACOSX_BUNDLE TRUE)
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${GLFW_INCLUDE_DIRECTORIES})
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/include
+
+    # Included for valid path to OpenGL helpers (glad, KHR)
     ${CMAKE_SOURCE_DIR}/include/Util/Window
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${GLFW_LIBRARIES} dl)
+target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 
-target_compile_options(${PROJECT_NAME} PRIVATE ${GLFW_CFLAGS_OTHER})
+if (UNIX AND NOT APPLE)
+    target_link_libraries(PixelForge PRIVATE m dl)
+endif()
