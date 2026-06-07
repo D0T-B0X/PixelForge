@@ -17,6 +17,8 @@ namespace util
 class RomLoader
 {
   public:
+    RomLoader();
+
     /**
      * @brief Load the uploaded rom and parse it
      * 
