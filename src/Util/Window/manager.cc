@@ -18,8 +18,15 @@ Manager::framebuffer_resize_callback(GLFWwindow* window, int width, int height)
 void
 Manager::drop_callback(GLFWwindow* window, int count, const char** paths)
 {
-    gameROM = paths[0];
-    pendingROM = true;
+    // add safeguards to protect program from window manager shenanigans
+    if (count > 0 && paths != nullptr && paths[0] != nullptr) {
+        
+        std::string payload(paths[0]);
+        if (!payload.empty()) {
+            gameROM = payload;
+            pendingROM = true;
+        }
+    }
 }
 
 Manager::Manager()
