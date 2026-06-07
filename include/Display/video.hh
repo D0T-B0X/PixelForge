@@ -50,6 +50,11 @@ class Video
     bool setPixel(Byte x_coord, Byte y_coord);
 
     /**
+     * Get the current vm screen pixel state
+     */
+    Pixel* getDisplayState();
+
+    /**
      * Clear the display by setting all pixels to OFF (0)
      */
     void clear();
