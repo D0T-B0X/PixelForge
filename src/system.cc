@@ -84,7 +84,9 @@ System::run()
             }
         }
 
-        windowManager.render(this->display.getDisplayState());
+        Byte display_width = this->display.getWidth();
+        Byte display_height = this->display.getHeight();
+        windowManager.render(this->display.getDisplayState(), display_width, display_height, this->display.isHighRes());
 
         windowManager.swapWindowBuffers();
     }
