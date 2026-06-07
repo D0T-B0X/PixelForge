@@ -87,7 +87,7 @@ Corresponding keyboard keys:
 
 ## Resources
 
-https://austinmorlan.com/posts/chip8_emulator/
-https://github.com/JohnEarnest/chip8Archive
-https://johnearnest.github.io/Octo/docs/chip8ref.pdf
-http://devernay.free.fr/hacks/chip8/chip8def.htm
+* https://austinmorlan.com/posts/chip8_emulator/
+* https://github.com/JohnEarnest/chip8Archive
+* https://johnearnest.github.io/Octo/docs/chip8ref.pdf
+* http://devernay.free.fr/hacks/chip8/chip8def.htm
