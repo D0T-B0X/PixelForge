@@ -128,6 +128,7 @@ CPU::execute_ControlOperations(const Operands& ops)
                             EPRINTF("Unrecognized instruction.\n")
                             std::exit(-1);
                     }
+                    break;
                 default:
                     EPRINTF("FATAL: Unrecognized instruction.\n")
                     std::exit(-1);
@@ -168,6 +169,9 @@ CPU:: execute_BranchOperations(const Operands& ops)
                 case 0x1:
                     I_EXA1(ops);
                     break;
+                default:
+                    EPRINTF("FATAL: Unrecognized instruction.\n")
+                    std::exit(-1);
             }
             break;
     }
@@ -266,6 +270,9 @@ CPU::execute_IOOperations(const Operands& ops)
         case 0x29:
             I_FX29(ops);
             break;
+        case 0x30:
+            I_FX30(ops);
+            break;
         case 0x33:
             I_FX33(ops);
             break;
@@ -274,6 +281,12 @@ CPU::execute_IOOperations(const Operands& ops)
             break;
         case 0x65:
             I_FX65(ops);
+            break;
+        case 0x75: 
+            I_FX75(ops);
+            break;
+        case 0x85:
+            I_FX85(ops);
             break;
         default:
             EPRINTF("FATAL: Unrecognized instruction.\n");
