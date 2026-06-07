@@ -78,7 +78,7 @@ System::run()
                 elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastTimerTick);
             }
 
-            for(int i = 0; i < 10; ++i)
+            for(int i = 0; i < EMULATOR_SPEED; ++i)
             {
                 cpu.cycle();
             }
