@@ -112,6 +112,11 @@ class Video
      */
     Byte getHeight();
 
+    /**
+     * @brief Returns the state of high res mode
+     */
+    bool isHighRes() const;
+
 };
 
 } // namespace display

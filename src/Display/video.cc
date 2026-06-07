@@ -142,5 +142,11 @@ Video::getHeight()
     return display_height;
 }
 
+bool
+Video::isHighRes() const
+{
+    return highResMode;
+}
+
 } // namespace display
 } // namespace chip8
