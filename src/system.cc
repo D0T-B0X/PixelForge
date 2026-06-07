@@ -1,3 +1,5 @@
+#include <chrono>
+
 #include "system.hh"
 
 namespace chip8
@@ -10,7 +12,8 @@ System::System()
     this->delay, 
     this->sound,
     this->keypad
-   )
+   ),
+   romLoaded(false)
 {
     // seed the RNG for instruction I_CXNN
     std::srand(std::time(nullptr));
@@ -53,23 +56,50 @@ System::updateKeypadInput()
 void
 System::run()
 {
-    while(!windowManager.shouldWindowClose()) {
-        windowManager.processInput();
-        updateKeypadInput();
+    auto lastTimerTick = std::chrono::steady_clock::now();
 
-        cpu.cycle();
+    while(!windowManager.shouldWindowClose()) {
+        glfwPollEvents();
+
+        if (windowManager.pendingROM) { loadRom(); }
+
+        if (romLoaded) {
+
+            windowManager.processInput();
+            updateKeypadInput();
+
+            auto now = std::chrono::steady_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastTimerTick);
+            while (elapsed.count() >= 16) {
+                delay.decrementTimer();
+                sound.decrementTimer();
+                lastTimerTick += std::chrono::milliseconds(16);
+                elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastTimerTick);
+            }
+
+            for(int i = 0; i < 10; ++i)
+            {
+                cpu.cycle();
+            }
+        }
+
+        windowManager.render(this->display.getDisplayState());
 
         windowManager.swapWindowBuffers();
-        glfwPollEvents();
     }
 
     windowManager.cleanup();
 }
 
 void
-System::loadRom(const char* path)
+System::loadRom()
 {
-    ram.loadRom(romLoader.parseROM(path));
+    const char* rom_path = windowManager.getROMPath();
+    const std::vector<Byte>& binary = romLoader.parseROM(rom_path);
+    ram.loadRom(binary);
+
+    windowManager.pendingROM = false;
+    romLoaded = true;
 }
 
 }

@@ -35,6 +35,12 @@ Video::setPixel(Byte x_coord, Byte y_coord)
     return pixel_state; 
 }
 
+Pixel*
+Video::getDisplayState()
+{
+    return display;
+}
+
 // Set all pixels to OFF
 void
 Video::clear()

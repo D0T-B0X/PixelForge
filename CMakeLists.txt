@@ -29,6 +29,8 @@ add_executable(
     ${PROJECT_SRC_DIR}/Util/Window/glad.c
 )
 
+set_target_properties(PixelForge PROPERTIES MACOSX_BUNDLE TRUE)
+
 target_include_directories(${PROJECT_NAME} PRIVATE ${GLFW_INCLUDE_DIRECTORIES})
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/include

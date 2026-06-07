@@ -21,7 +21,7 @@ RAM::load(Addr address) const
 {  
     // Access over 4095 results in termination
     if (address > 0xFFF) {
-        EPRINTF("FATAL: RAM::Invalid Address Access.\n")
+        EPRINTF("FATAL: RAM::Load::Invalid Address Access.\n")
         exit(-1);
     }
 
@@ -32,9 +32,9 @@ RAM::load(Addr address) const
 void
 RAM::store(Addr address, Byte data)
 {
-    // access over 4095 and below 512 results in termination 
-    if (address > 0xFFF || address < 0x200) {
-        EPRINTF("FATAL: RAM::Invalid Address Access.\n")
+    // access over 4095 results in termination
+    if (address > 0xFFF) {
+        EPRINTF("FATAL: RAM::Store::Invalid Address Access.\n")
         exit(-1);
     }
 
