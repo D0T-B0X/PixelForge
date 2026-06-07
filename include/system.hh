@@ -49,6 +49,8 @@ class System
     // Emulator ROM loader
     util::RomLoader romLoader;
 
+    bool romLoaded;
+
     void updateKeypadInput();
         
   public:
@@ -56,7 +58,7 @@ class System
 
     void run();
 
-    void loadRom(const char* path);
+    void loadRom();
 };
 
 } // namespace chip8
