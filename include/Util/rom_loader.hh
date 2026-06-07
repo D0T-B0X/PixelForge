@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 
-#include "Memory/ram.hh"
+#include "types.hh"
 
 #define MAX_FILE_SIZE 3584 // (4096 - 512) bytes
 
