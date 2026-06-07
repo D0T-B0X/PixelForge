@@ -14,6 +14,13 @@ RAM::RAM()
         std::end(display::fontset),
         &ram[FONTSET_START_ADDRESS]
     );
+
+    // load the SCHIP fontset into RAM
+    std::copy(
+        std::begin(display::schip_fontset),
+        std::end(display::schip_fontset),
+        &ram[SCHIP_FONTSET_START_ADDRESS]
+    );
 }
 
 Byte
