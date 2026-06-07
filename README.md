@@ -1,93 +1,48 @@
-# PixelForge
+# Pixel Forge
 
-## Track
+Pixel Forge is an emulator virtual machine designed to run Chip8 and Super-Chip ROMs.
 
-Retro & Emulator
+Dodge on Chip-8
+![Dodge on Chip-8](media/dodge.gif)
 
-## Problem Statement
+Snake on Chip-8
+![Snake on Chip-8](media/snake.gif)
 
-Build a working **Chip-8 emulator** that can load and run simple Chip-8 programs or games.
+Dinogame on Chip-8
+![Dinogame on Chip-8](media/dinogame.gif)
 
-Chip-8 is a small virtual machine used for classic-style games and is one of the most beginner-friendly emulator projects. Your goal is to build the core parts of the emulator and run at least one legal Chip-8 ROM, demo, or self-written test program.
+## Installation
 
-The focus is on building a real emulator for a real retro virtual system, while keeping the scope achievable in 36 hours.
+The release section of this repository contains pre-compiled binaries for macOS, Windows and Linux. Download the .zip file, extract it and run the executable to use to emulator.
 
-## Theme
+### Local Compilation
 
-Build the machine. Run the game.
+You can also compile the binary on your local machine with ease.
 
-## Core Requirements
+#### Dependencies
 
-Your emulator must include:
+ > C++ 20 (or higher)
+ > CMake 3.11+
+ > GLFW3
 
-1. **Memory**
-   - 4 KB memory.
-   - Program loaded into memory starting at the standard Chip-8 program address.
+Run CMake to compile the binary
 
-2. **Registers**
-   - 16 general-purpose registers: V0 to VF.
-   - Index register I.
-   - Program counter.
-   - Stack and stack pointer.
+```
+cmake -S . -B build
+cmake --build build -j $(nproc)
+```
 
-3. **Instruction Cycle**
-   - Fetch instruction.
-   - Decode instruction.
-   - Execute instruction.
+The binary will be available in `build/PixelForge`
 
-4. **Display**
-   - 64 x 32 monochrome display.
-   - Ability to clear the screen.
-   - Ability to draw sprites.
+## How to Play
 
-5. **Input**
-   - Map the Chip-8 keypad to a modern keyboard layout.
+Double click on the binary or use the terminal to execute it `./PixelForge`
 
-6. **Timers**
-   - Delay timer.
-   - Sound timer, even if sound is represented using a simple beep or visual indicator.
+The emulator starts with a black screen. Drag and drop any chip-8 or SCHIP game ROM into this window to start the emulator.
 
-7. **ROM Loading**
-   - Load at least one legal Chip-8 ROM, public-domain demo, homebrew game, or self-written test program.
+### Keypad mapping
 
-## Minimum Viable Product
-
-A successful MVP should have:
-
-- A Chip-8 emulator window or browser page.
-- A ROM loader.
-- Working display.
-- Working keyboard input.
-- Enough implemented instructions to run at least one simple ROM or test program.
-- A README explaining how to run the emulator.
-
-## Important Legal Rule
-
-Do not include copyrighted game ROMs.
-
-You may use:
-
-- Public-domain Chip-8 ROMs.
-- Homebrew Chip-8 ROMs.
-- Self-written test ROMs.
-- Simple demo programs created by your team.
-
-## Suggested Tech Stack
-
-You may use any stack, including:
-
-- JavaScript + HTML Canvas
-- Python + Pygame
-- C++
-- Rust
-- Java
-- Go
-
-A browser-based emulator is recommended for easy demoing.
-
-## Suggested Keyboard Mapping
-
-Original Chip-8 keypad:
+Chip-8 emulator keypad map:
 
 | 1 | 2 | 3 | C |
 |---|---|---|---|
@@ -95,57 +50,44 @@ Original Chip-8 keypad:
 | 7 | 8 | 9 | E |
 | A | 0 | B | F |
 
-Suggested modern keyboard mapping:
+Corresponding keyboard keys:
 
 | 1 | 2 | 3 | 4 |
 |---|---|---|---|
 | Q | W | E | R |
 | A | S | D | F |
-| Z | X | C | V |
+| Z | X | C | V | 
 
-## Stretch Goals
+## Features
 
-- Visual debugger
-- Register viewer
-- Memory viewer
-- Current opcode display
-- Pause/resume
-- Step one instruction at a time
-- Speed control
-- Sound support
-- Drag-and-drop ROM loading
-- Multiple demo ROMs
+ * Cross platform support: The executable can be compiled on linux, windows and macOS.
+ * Chip-8 extension support: The emulator supports ROMs from the original Chip-8, Super-Chip and XO Chip.
+ * Hardware quirks support: The hardware has been modeled for configurable hardware quirks.
+ * CPU Freuency: The emulator CPU runs at 700Hz, however that can be easily modified by the changing the `EMULATOR_FREQUENCY` constant in `include/system.hh`
+ * Dynamic resolution scaling: The game can switch between a low resolution (`64x32`) and high resolution (`128x64`) display modes.
 
-## AI Tool Usage
+## Project Structure
 
-You may use AI tools for:
+ > src/Processor: CPU instructions, fetch, decode, execute, call stack.
+ > src/IO: keypad state management.
+ > src/Memory: System RAM (4KB) load, store.
+ > src/Timer: Delay and Sound timer states, set, decrement
+ > src/Display: Pixel buffer of the screen, clear, scroll, etc.
+ > src/Util: Emulator window manager and ROM loader components
+## Known Bugs
 
-- Understanding Chip-8 instructions
-- Debugging opcode behavior
-- Generating UI code
-- Creating test programs
-- Writing documentation
+ * Emulator window crashes on drag and drop hover in wayland compositors
+ * No sound 
 
-You must mention in your final README how AI tools were used.
+## AI Usage 
 
-## Demo Expectations
+ * AI was used for understanding the inner state of the emulator
+ * Completion of repetitive tasks (such as ISA definition)
+ * OpenGL state management and pixel texture buffer uploads
 
-Your final demo should show:
+## Resources
 
-1. Loading a Chip-8 ROM or test program.
-2. Running the program.
-3. Display output working.
-4. Keyboard input working.
-5. A short explanation of the emulator loop.
-6. Optional: debugger or register view.
-
-## Judging Focus
-
-You will be judged on:
-
-- Emulator correctness
-- Technical implementation
-- Ability to run a real Chip-8 program
-- Clarity of demo
-- Documentation
-- Scope management
+https://austinmorlan.com/posts/chip8_emulator/
+https://github.com/JohnEarnest/chip8Archive
+https://johnearnest.github.io/Octo/docs/chip8ref.pdf
+http://devernay.free.fr/hacks/chip8/chip8def.htm
