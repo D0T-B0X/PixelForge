@@ -13,9 +13,13 @@ Dinogame on Chip-8
 
 ## Installation
 
+NOTE: The MacOS executable does not yet work without modifications due to OpenGL compatibility issues
+
 The release section of this repository contains pre-compiled binaries for macOS, Windows and Linux. Download the .zip file, extract it and run the executable to use to emulator.
 
 ### Local Compilation
+
+NOTE: Users on MacOS need to change the OpenGL version from 4.6 to 4.1 to run the emulator due to compatibility issues
 
 You can also compile the binary on your local machine with ease.
 
