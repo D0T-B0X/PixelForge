@@ -38,12 +38,22 @@ jobs:
           name: PixelForge-Win64
           path: ${{github.workspace}}/build/Release/PixelForge.exe
 
-      - name: Stage macos app bundle
+      - name: Compress macOS Build
+        if: runner.os == 'macOS'
+        run: |
+          cd ${{github.workspace}}/build
+          if [ -d "PixelForge.app" ]; then
+            zip -r PixelForge-macOS.zip PixelForge.app
+          else
+            zip PixelForge-macOS.zip PixelForge
+          fi
+
+      - name: Stage macos artifact
         if: runner.os == 'macOS'
         uses: actions/upload-artifact@v4
         with:
           name: PixelForge-macOS
-          path: ${{github.workspace}}/build/PixelForge.app
+          path: ${{github.workspace}}/build/PixelForge-macOS.zip
 
       - name: Stage Linux Executable
         if: runner.os == 'Linux'
@@ -67,17 +77,11 @@ jobs:
         with:
           path: artifacts
 
-      - name: Compress macOS Bundle
-        if: runner.os == 'macOS'
-        run: |
-          cd ${{github.workspace}}/build
-          zip -r PixelForge-macOS.zip PixelForge.app
-
       - name: Publish Release Assets
         uses: softprops/action-gh-release@v2
         with:
           files: |
             artifacts/PixelForge-Win64/PixelForge.exe
             artifacts/PixelForge-Linux/PixelForge
-            artifacts/PixelForge-macOS.zip
+            artifacts/PixelForge-macOS/PixelForge-macOS.zip
           generate_release_notes: true
