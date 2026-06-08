@@ -11,7 +11,8 @@ System::System()
     this->display, 
     this->delay, 
     this->sound,
-    this->keypad
+    this->keypad,
+    this->quirks
    ),
    romLoaded(false)
 {
@@ -77,13 +78,15 @@ System::run()
                 elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastTimerTick);
             }
 
-            for(int i = 0; i < 10; ++i)
+            for(int i = 0; i < EMULATOR_SPEED; ++i)
             {
                 cpu.cycle();
             }
         }
 
-        windowManager.render(this->display.getDisplayState());
+        Byte display_width = this->display.getWidth();
+        Byte display_height = this->display.getHeight();
+        windowManager.render(this->display.getDisplayState(), display_width, display_height, this->display.isHighRes());
 
         windowManager.swapWindowBuffers();
     }

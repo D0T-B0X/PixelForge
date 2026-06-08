@@ -18,8 +18,15 @@ Manager::framebuffer_resize_callback(GLFWwindow* window, int width, int height)
 void
 Manager::drop_callback(GLFWwindow* window, int count, const char** paths)
 {
-    gameROM = paths[0];
-    pendingROM = true;
+    // add safeguards to protect program from window manager shenanigans
+    if (count > 0 && paths != nullptr && paths[0] != nullptr) {
+        
+        std::string payload(paths[0]);
+        if (!payload.empty()) {
+            gameROM = payload;
+            pendingROM = true;
+        }
+    }
 }
 
 Manager::Manager()
@@ -111,10 +118,18 @@ Manager::swapWindowBuffers()
 }
 
 void 
-Manager::render(const Pixel* display_state)
+Manager::render(const Pixel* display_state, Byte width, Byte height, bool high_res)
 {
+
+    uint32_t* pixel_buffer;
+    if (high_res) {
+        pixel_buffer = high_res_pixel_buffer;
+    } else {
+        pixel_buffer = low_res_pixel_buffer;
+    }
+
     // convert monochrome pixel data into RGBA pixels
-    for (int i = 0; i < (SCREEN_HEIGHT*SCREEN_WIDTH); ++i) {
+    for (int i = 0; i < (width*height); ++i) {
         pixel_buffer[i] = display_state[i] ? FOREGROUND_COLOR : BACKGROUND_COLOR;
     }
 
@@ -125,7 +140,9 @@ Manager::render(const Pixel* display_state)
     // stream the generated texture to VRAM
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_id);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, pixel_buffer);
+
+    // Reallocate and push the texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixel_buffer);
 
     // bufferless draw call for final frame render
     glUseProgram(shader_program);
@@ -160,8 +177,6 @@ Manager::initRendering()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    // allocating immutable VRAM storage
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, SCREEN_WIDTH, SCREEN_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

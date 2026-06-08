@@ -21,12 +21,18 @@
 #include "Util/Window/manager.hh"
 #include "Util/rom_loader.hh"
 
+constexpr inline uint8_t EMULATOR_SPEED = 10; // 700 Hz
+
 namespace chip8
 {
 
 class System
 {
   private:
+
+    // Emulator global configuration
+    EmulatorQuirks quirks;
+    
     // system RAM (4KB)
     memory::RAM ram;
 

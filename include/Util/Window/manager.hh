@@ -8,8 +8,11 @@
 
 #include "types.hh"
 
-#define SCREEN_WIDTH  64
-#define SCREEN_HEIGHT 32
+constexpr inline Byte LOW_RES_SCREEN_WIDTH = 64;
+constexpr inline Byte LOW_RES_SCREEN_HEIGHT = 32;
+
+constexpr inline Byte HIGH_RES_SCREEN_WIDTH = 128;
+constexpr inline Byte HIGH_RES_SCREEN_HEIGHT = 64;
 
 #define FOREGROUND_COLOR 0xFFFFFFFFu
 #define BACKGROUND_COLOR 0x00000000u
@@ -32,7 +35,9 @@ class Manager
 
     static inline std::string  gameROM;
 
-    uint32_t                   pixel_buffer[SCREEN_WIDTH * SCREEN_HEIGHT]; // 64x32 pixel buffer
+    // Two buffers to hold high res and low res textures
+    uint32_t                   low_res_pixel_buffer[LOW_RES_SCREEN_WIDTH * LOW_RES_SCREEN_HEIGHT]; 
+    uint32_t                   high_res_pixel_buffer[HIGH_RES_SCREEN_WIDTH * HIGH_RES_SCREEN_HEIGHT];
     GLuint                     texture_id;
     GLuint                     vertex_array_object;
     GLuint                     shader_program;
@@ -74,7 +79,7 @@ class Manager
 
     void swapWindowBuffers();
 
-    void render(const Pixel* display_state);
+    void render(const Pixel* display_state, Byte width, Byte height, bool high_res);
 
     void initRendering();
 
@@ -111,4 +116,3 @@ class Manager
 } // namespace chip8
 
 #endif // _UTIL_WINDOW_MANAGER_HH_
-
