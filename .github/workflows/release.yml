@@ -68,10 +68,10 @@ jobs:
           path: artifacts
 
       - name: Compress macOS Bundle
+        if: runner.os == 'macOS'
         run: |
-          cd artifacts/PixelForge-macOS
-          zip -r ../PixelForge-macOS.zip PixelForge.app
-          cd ../..
+          cd ${{github.workspace}}/build
+          zip -r PixelForge-macOS.zip PixelForge.app
 
       - name: Publish Release Assets
         uses: softprops/action-gh-release@v2
