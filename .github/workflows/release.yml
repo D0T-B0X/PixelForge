@@ -1,0 +1,87 @@
+name: Build Emulator Binaries
+
+on:
+  push:
+    branches: ["main", "DotBox"]
+    tags:
+      - 'v*' 
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xorg-dev libwayland-dev libxkbcommon-dev
+      
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compile native binary
+        run: cmake --build ${{github.workspace}}/build --config Release
+
+      - name: Stage windows executable
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PixelForge-Win64
+          path: ${{github.workspace}}/build/Release/PixelForge.exe
+
+      - name: Compress macOS Build
+        if: runner.os == 'macOS'
+        run: |
+          cd ${{github.workspace}}/build
+          if [ -d "PixelForge.app" ]; then
+            zip -r PixelForge-macOS.zip PixelForge.app
+          else
+            zip PixelForge-macOS.zip PixelForge
+          fi
+
+      - name: Stage macos artifact
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PixelForge-macOS
+          path: ${{github.workspace}}/build/PixelForge-macOS.zip
+
+      - name: Stage Linux Executable
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PixelForge-Linux
+          path: ${{github.workspace}}/build/PixelForge
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    if: startsWith(github.ref, 'refs/tags/v') 
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Download all matrix artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Publish Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/PixelForge-Win64/PixelForge.exe
+            artifacts/PixelForge-Linux/PixelForge
+            artifacts/PixelForge-macOS/PixelForge-macOS.zip
+          generate_release_notes: true
