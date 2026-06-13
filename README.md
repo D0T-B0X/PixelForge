@@ -25,9 +25,16 @@ You can also compile the binary on your local machine with ease.
 
 #### Dependencies
 
+```
  > C++ 20 (or higher)
  > CMake 3.11+
  > GLFW3
+```
+
+Example installation of GLFW3 for Ubuntu
+```
+sudo apt-get install libglfw3
+```
 
 Run CMake to compile the binary
 
@@ -36,11 +43,11 @@ cmake -S . -B build
 cmake --build build -j $(nproc)
 ```
 
-The binary will be available in `build/PixelForge`
+The binary will be available in `/build/PixelForge`
 
 ## How to Play
 
-Double click on the binary or use the terminal to execute it `./PixelForge`
+Double click on the binary or use the terminal to execute it `./build/PixelForge`
 
 The emulator starts with a black screen. Drag and drop any chip-8 or SCHIP game ROM into this window to start the emulator.
 
